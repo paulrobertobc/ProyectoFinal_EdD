@@ -1,16 +1,18 @@
-﻿using System;
+﻿using ProyectoFinal_EdD;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinal_EdD
+namespace ProyectoFinal_EdD_Grafo
 {
     public class Grafo
     {
-        int[,] mAdya;        // Matriz de adyacencia (pesos)
-        int[] indegree;
-        int nodos;
+        private int[,] mAdya;
+        private int[] indegree;
+        private int nodos;
 
         public Grafo(int nodos)
         {
@@ -18,198 +20,167 @@ namespace ProyectoFinal_EdD
             mAdya = new int[nodos, nodos];
             indegree = new int[nodos];
         }
-
-        public void crearArista(int nodoI, int nodoF)
-        {
-            mAdya[nodoI, nodoF] = 1;
-        }
-
-        public void crearArista(int nodoI, int nodoF, int peso)
+        public void CrearArista(int nodoI, int nodoF, int peso)
         {
             mAdya[nodoI, nodoF] = peso;
         }
 
-        public void mostrarAdyacencia()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            for (int i = 0; i < this.nodos; i++)
-            {
-                Console.Write("\t{0}", i);
-            }
-            Console.WriteLine(" ");
+        public int ObtenerPeso(int f, int c) => mAdya[f, c];
 
-            for (int i = 0; i < this.nodos; i++)
+        public int[,] ObtenerMatriz() => mAdya;
+    }
+    ////////////////Dijjstra////////////////////
+    public class Dijkstra
+    {
+        private Grafo grafo;
+
+        public Dijkstra(Grafo grafo)
+        {
+            this.grafo = grafo;
+        }
+
+        public void BuscarRuta(int inicio, int fin, int cantNodos)
+        {
+            int[,] tabla = new int[cantNodos, 3];
+            const int VISITADO = 0;
+            const int DIST = 1;
+            const int PREV = 2;
+
+            for (int i = 0; i < cantNodos; i++)
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(i);
-                for (int j = 0; j < this.nodos; j++)
+                tabla[i, VISITADO] = 0;
+                tabla[i, DIST] = int.MaxValue;
+                tabla[i, PREV] = -1;
+            }
+
+            tabla[inicio, DIST] = 0;
+
+            int actual = inicio;
+
+            do
+            {
+                tabla[actual, VISITADO] = 1;
+
+                for (int col = 0; col < cantNodos; col++)
                 {
-                    if (mAdya[i, j] > 0)
+                    int peso = grafo.ObtenerPeso(actual, col);
+
+                    if (peso > 0)
                     {
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write("\t{0}", mAdya[i, j]);
+                        int nuevaDist = tabla[actual, DIST] + peso;
+
+                        if (nuevaDist < tabla[col, DIST])
+                        {
+                            tabla[col, DIST] = nuevaDist;
+                            tabla[col, PREV] = actual;
+                        }
+                    }
+                }
+
+                int menorDist = int.MaxValue;
+                int menorNodo = -1;
+
+                for (int i = 0; i < cantNodos; i++)
+                {
+                    if (tabla[i, VISITADO] == 0 && tabla[i, DIST] < menorDist)
+                    {
+                        menorDist = tabla[i, DIST];
+                        menorNodo = i;
+                    }
+                }
+
+                actual = menorNodo;
+
+            } while (actual != -1);
+            ListaEnlazada<int> ruta = new ListaEnlazada<int>();
+            int nodo = fin;
+
+            if (tabla[fin, DIST] == int.MaxValue)
+            {
+                Console.WriteLine("No existe ruta.");
+                return;
+            }
+
+            while (nodo != -1)
+            {
+                ruta.Insertar(nodo);
+                nodo = tabla[nodo, PREV];
+            }
+
+            ruta.Reverse();
+            Console.WriteLine(string.Join(" -> ", ruta));
+        }
+    }
+    ////////////Floy-Warshall/////////////////////
+    public class FloydWarshall
+    {
+        private Grafo grafo;
+
+        public FloydWarshall(Grafo grafo)
+        {
+            this.grafo = grafo;
+        }
+
+        public ResultadoFloyd BuscarRuta(int n)
+        {
+            int[,] original = grafo.ObtenerMatriz();
+            int[,] dist = new int[n, n];
+            bool[,] alcanzable = new bool[n, n];
+
+            const int INF = int.MaxValue / 2;
+
+            // Copiar matriz
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j)
+                    {
+                        dist[i, j] = 0;
+                        alcanzable[i, j] = true;
+                    }
+                    else if (original[i, j] > 0)
+                    {
+                        dist[i, j] = original[i, j];
+                        alcanzable[i, j] = true;
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("\t{0}", mAdya[i, j]);
+                        dist[i, j] = INF;
+                        alcanzable[i, j] = false;
                     }
                 }
-                Console.WriteLine(" ");
             }
-            Console.ResetColor();
-        }
 
-        public int obtenerAdyacencia(int f, int c) => mAdya[f, c];
-
-        public void calcularIndegree()
-        {
-            for (int i = 0; i < this.nodos; i++)
+            // Algoritmo Floyd
+            for (int k = 0; k < n; k++)
             {
-                for (int j = 0; j < this.nodos; j++)
+                for (int i = 0; i < n; i++)
                 {
-                    if (mAdya[j, i] > 0) indegree[i]++;
-                }
-            }
-        }
-
-        public void mostrarIndegree()
-        {
-            for (int i = 0; i < this.nodos; i++)
-            {
-                Console.WriteLine("Nodo {0}: {1}", i, indegree[i]);
-            }
-        }
-
-        public int encontrarNodoSinArista()
-        {
-            bool busqueda = false;
-            int i = 0;
-            for (i = 0; i < this.nodos; i++)
-            {
-                if (indegree[i] > 0)
-                {
-                    busqueda = true;
-                    break;
-                }
-            }
-            if (busqueda) return i;
-            else return -1;
-        }
-
-        public void decrementarIndegree(int nodo)
-        {
-            indegree[nodo] = -1;
-            for (int i = 0; i < this.nodos; i++)
-            {
-                if (mAdya[nodo, i] > 1) indegree[i]--;
-            }
-        }
-
-        // ============================================================
-        // =====================    NUEVO    ==========================
-        // ============================================================
-
-        // NUEVO: Obtener lista de vecinos de un nodo
-        public List<int> ObtenerVecinos(int nodo)
-        {
-            List<int> vecinos = new List<int>();
-            for (int i = 0; i < nodos; i++)
-            {
-                if (mAdya[nodo, i] > 0)  // hay arista
-                    vecinos.Add(i);
-            }
-            return vecinos;
-        }
-
-        // NUEVO: Validar que un nodo exista
-        public bool NodoValido(int nodo)
-        {
-            return nodo >= 0 && nodo < nodos;
-        }
-
-
-        // ============================================================
-        // =====================   DIJKSTRA   ==========================
-        // ============================================================
-        public (int[] dist, int[] previo) Dijkstra(int origen)
-        {
-            if (!NodoValido(origen))
-                throw new Exception("Nodo origen fuera de rango.");
-
-            int[] dist = new int[nodos];     // distancias mínimas
-            bool[] visitado = new bool[nodos]; // nodos ya procesados
-            int[] previo = new int[nodos];   // para reconstruir la ruta
-
-            const int INF = int.MaxValue;
-
-            // Inicializar
-            for (int i = 0; i < nodos; i++)
-            {
-                dist[i] = INF;
-                previo[i] = -1;
-                visitado[i] = false;
-            }
-
-            dist[origen] = 0;
-
-            // Procesamos los nodos
-            for (int _ = 0; _ < nodos - 1; _++)
-            {
-                // 1. Elegir el nodo con la distancia mínima NO visitado
-                int u = MinDistancia(dist, visitado);
-                if (u == -1) break; // No quedan alcanzables
-
-                visitado[u] = true;
-
-                // 2. Relajar a los vecinos
-                for (int v = 0; v < nodos; v++)
-                {
-                    int peso = mAdya[u, v];
-
-                    // si existe arista y no está visitado
-                    if (peso > 0 && !visitado[v])
+                    for (int j = 0; j < n; j++)
                     {
-                        // si se encuentra un camino mejor
-                        if (dist[u] != INF && dist[u] + peso < dist[v])
+                        if (dist[i, k] + dist[k, j] < dist[i, j])
                         {
-                            dist[v] = dist[u] + peso;
-                            previo[v] = u; // Para reconstruir la ruta
+                            dist[i, j] = dist[i, k] + dist[k, j];
+                            alcanzable[i, j] = true;
                         }
                     }
                 }
             }
 
-            return (dist, previo);
-        }
-
-        // NUEVO: Método auxiliar para encontrar el nodo con menor distancia
-        private int MinDistancia(int[] dist, bool[] visitado)
-        {
-            int min = int.MaxValue;
-            int minIndex = -1;
-
-            for (int i = 0; i < nodos; i++)
+            return new ResultadoFloyd()
             {
-                if (!visitado[i] && dist[i] <= min)
-                {
-                    min = dist[i];
-                    minIndex = i;
-                }
-            }
-            return minIndex;
+                Distancias = dist,
+                Alcanzable = alcanzable,
+                N = n
+            };
         }
 
-        // NUEVO: Reconstruir ruta óptima desde origen a destino
-        public List<int> ReconstruirRuta(int[] previo, int destino)
-        {
-            List<int> ruta = new List<int>();
-
-            for (int actual = destino; actual != -1; actual = previo[actual])
-                ruta.Add(actual);
-
-            ruta.Reverse();
-            return ruta;
-        }
+    }
+    public class ResultadoFloyd
+    {
+        public int[,] Distancias { get; set; }
+        public bool[,] Alcanzable { get; set; }
+        public int N { get; set; }
     }
 }

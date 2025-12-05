@@ -56,6 +56,12 @@ namespace ProyectoFinal_EdD
             if (frente == null) throw new Exception("La cola está vacía");
             return frente.D;
         }
+        public T Primero()
+        {
+            if (frente == null) return default(T);
+            return frente.D;
+        }
+
         //con esto puede convertirlo a lista, darle foreach, integrarlo a LINQ, etc.
         public IEnumerable<T> ObtenerElementos()
         {

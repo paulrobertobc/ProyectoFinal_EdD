@@ -1,86 +1,351 @@
-﻿using System;
+﻿using ProyectoFinal_EdD_Grafo;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagLib; // TagLibSharp
 
 namespace ProyectoFinal_EdD
 {
     public partial class Form1 : Form
     {
+        private ListaEnlazada<Cancion> playlist = new ListaEnlazada<Cancion>();
+        private Pila<Cancion> pila_favoritos = new Pila<Cancion>();
+        private Cola<Cancion> cola_historial = new Cola<Cancion>();
+        private ArbolBinario<Cancion> biblioteca = new ArbolBinario<Cancion>();
+        private Cancion cancionActual = null;
+        private Dictionary<int, string> Generos = new Dictionary<int, string>();
+        private ReproductorMP3 player = new ReproductorMP3();
+        private Grafo grafo;
         public Form1()
         {
             InitializeComponent();
-        }
-        public ListaEnlazada<string> lista = new ListaEnlazada<string>();
-        public Pila<int> pila = new Pila<int>();
-        public Cola<int> cola = new Cola<int>();
-        public ArbolBinario arbol = new ArbolBinario();
-        private void label1_Click(object sender, EventArgs e)
-        {
+            InicializarGeneros();
+            InicializarGrafoMusical();
 
+            player.PlaybackStopped -= Player_PlaybackStopped;
+            player.PlaybackStopped += Player_PlaybackStopped;
         }
+        //llenamos el diccionario de generos precargados
+        void InicializarGeneros()
+        {
+            Generos.Add(0, "Alternativo");
+            Generos.Add(1, "Clásico");
+            Generos.Add(2, "Pop");
+            Generos.Add(3, "R&B");
+            Generos.Add(4, "Rap");
+            Generos.Add(5, "Reggae");
+            Generos.Add(6, "Reggaeton");
+            Generos.Add(7, "Rock");
+            Generos.Add(8, "Metal");
+            Generos.Add(9, "Jazz");
+        }
+        //generos, aristas y pesos precargados
+        void InicializarGrafoMusical()
+        {
+            grafo = new Grafo(10);
 
-        private void btnencolar_Click(object sender, EventArgs e)
-        {
-            pila.Apilar(int.Parse(tbpila.Text));
-            llenadopila();
+            // Alternativo
+            grafo.CrearArista(0, 7, 2);
+            grafo.CrearArista(0, 2, 4);
+            grafo.CrearArista(0, 8, 6);
+            grafo.CrearArista(0, 3, 7);
+
+            // Clásico
+            grafo.CrearArista(1, 9, 5);
+            grafo.CrearArista(1, 2, 8);
+
+            // Pop
+            grafo.CrearArista(2, 3, 2);
+            grafo.CrearArista(2, 6, 3);
+            grafo.CrearArista(2, 4, 4);
+
+            // R&B
+            grafo.CrearArista(3, 4, 2);
+            grafo.CrearArista(3, 6, 5);
+
+            // Rap
+            grafo.CrearArista(4, 6, 3);
+
+            // Reggae
+            grafo.CrearArista(5, 4, 4);
+            grafo.CrearArista(5, 6, 6);
+
+            // Reggaeton
+            grafo.CrearArista(6, 3, 5);
+            grafo.CrearArista(6, 2, 3);
+
+            // Rock
+            grafo.CrearArista(7, 0, 2);
+            grafo.CrearArista(7, 8, 2);
+            grafo.CrearArista(7, 2, 6);
+
+            // Metal
+            grafo.CrearArista(8, 7, 2);
+
+            // Jazz
+            grafo.CrearArista(9, 1, 3);
+            grafo.CrearArista(9, 3, 6);
         }
-        public void llenadopila()
+        private Grafo ExpandirGrafo(Grafo g)
         {
-            listBox1.Items.Clear();
-            foreach (var item in pila.ObtenerElementos())
+            int n = Generos.Count;
+            Grafo nuevo = new Grafo(n + 1);
+
+            int[,] mat = g.ObtenerMatriz();
+
+            for (int i = 0; i < n; i++)
             {
-                listBox1.Items.Add(item);
+                for (int j = 0; j < n; j++)
+                {
+                    nuevo.CrearArista(i, j, mat[i, j]);
+                }
+                    
+            }
+            return nuevo;
+        }
+        private void Player_PlaybackStopped(object sender, EventArgs e)
+        {
+            // Al terminar una canción, reproducir siguiente de la lista enlazada playlist
+            this.BeginInvoke(new Action(() =>
+            {
+                var siguiente = playlist.Siguiente(cancionActual);  
+                if (siguiente != null)
+                    ReproducirCancion(siguiente);
+            }));
+        }
+
+        private void agregarArchivosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //abrimos openfiledialog para leer archivos mp3
+            using (OpenFileDialog of = new OpenFileDialog())
+            {
+                of.Filter = "Archivos de audio|*.mp3;*.wav;*.flac;*.m4a";
+                of.Multiselect = true;
+
+                if (of.ShowDialog() != DialogResult.OK) return;
+
+                foreach (var ruta in of.FileNames)
+                {
+                    // aqui vamos a leer los metadatos de la canción en mp3 usando TagLibSharp
+                    try
+                    {
+                        var t = TagLib.File.Create(ruta);
+                        var titulo = t.Tag.Title ?? Path.GetFileNameWithoutExtension(ruta);
+                        var artista = t.Tag.FirstPerformer ?? "Desconocido";
+                        var genero = t.Tag.FirstGenre ?? "Indefinido";
+                        var año = (int)(t.Tag.Year);
+                        var album = t.Tag.Album ?? "Desconocido";
+
+                        grafo = ExpandirGrafo(grafo);
+
+                        genero = genero.Trim();
+
+                        int id;
+
+                        // Verificar si ya existe el género
+                        if (Generos.Values.Contains(genero, StringComparer.OrdinalIgnoreCase))
+                        {
+                            // Si existe, obtener su ID existente
+                            id = Generos.First(g =>g.Value.Equals(genero, StringComparison.OrdinalIgnoreCase)).Key;
+                        }
+                        else
+                        {
+                            // Si NO existe, crear nuevo
+                            id = Generos.Count;
+                            Generos.Add(id, genero);
+
+                            // Como cambia la cantidad de nodos, expandimos el grafo
+                            grafo = ExpandirGrafo(grafo);
+                        }
+
+                        var c = new Cancion
+                        {
+                            Titulo = titulo,
+                            Artista = artista,
+                            Año = año,
+                            Album = album,
+                            Genero = genero,
+                            Ruta = ruta
+                        };
+
+                        playlist.Insertar(c);
+                        biblioteca.Insertar(c);
+                        listBoxPlaylist.Items.Add(c);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"No se pudo leer: {ruta}\n{ex.Message}");
+                    }
+                }
+
             }
         }
 
-        private void btndesencolar_Click(object sender, EventArgs e)
+        private void listBoxPlaylist_DoubleClick(object sender, EventArgs e)
         {
-            pila.Desapilar();
-            llenadopila();
-        }
-
-        private void btnencolar_Click_1(object sender, EventArgs e)
-        {
-            cola.Encolar(int.Parse(tbpila.Text));
-            llenadocola();
-        }
-        public void llenadocola()
-        {
-            listBox2.Items.Clear();
-            foreach (var item in cola.ObtenerElementos())
+            if (listBoxPlaylist.SelectedItem is Cancion c)
             {
-                listBox2.Items.Add(item);
+                ReproducirCancion(c);
+            }
+            else
+            {
+                var s2 = cancionActual;
+                if (s2 != null) ReproducirCancion(s2);
+            }
+            listBoxPlaylist.ClearSelected();
+        }
+        private void ReproducirCancion(Cancion c)
+        {
+            cancionActual = c;
+
+            if (c == null) return;
+
+            try
+            {
+                player.Reproducir(c.Ruta);
+                cola_historial.Encolar(c);
+                pbCaratula.Image = player.ObtenerCaratula(c.Ruta) ?? Properties.Resources.nave;
+                lblNombreCancion.Text = $"{c.Titulo}";
+                lbArtistaCancion.Text = $"{c.Artista}";
+                lbGenero.Text = $"{c.Genero}";
+                lbAlbumAño.Text = $"{c.Album} [{c.Año}]";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al reproducir: " + ex.Message);
+            }
+        }
+        private void btnPausa_Click(object sender, EventArgs e)
+        {
+            if (cancionActual == null)
+            {
+                ReproducirCancion(playlist.Cabeza.D);
+            }
+            if (player.Reproduciendo)
+            {
+                player.Pausar();
+                btnPausa.Text = "▶️";
+                lbEstadoCancion.Text = "En Pausa: ";
+            }
+            else if (player.Pausado)
+            {
+                player.Continuar();
+                btnPausa.Text = "⏸️";
+                lbEstadoCancion.Text = "Reproduciendo:";
+            }
+        }
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            listBoxPlaylist.ClearSelected();
+
+            if (cancionActual == null)
+            {
+                // Primera vez: reproducir primera canción
+                if (playlist.Cabeza != null)
+                {
+                    ReproducirCancion(playlist.Cabeza.D);
+                }
+                return;
             }
 
+            var siguiente = playlist.Siguiente(cancionActual);
+
+            if (siguiente == null)
+            {
+                MessageBox.Show("Ya estás en la última canción.");
+                return;
+            }
+
+            ReproducirCancion(siguiente);
+            cancionActual = siguiente;
         }
-        private void btndesencolar_Click_1(object sender, EventArgs e)
+        private void btnAnterior_Click(object sender, EventArgs e)
         {
-            cola.Desencolar();
-            llenadocola();
+            listBoxPlaylist.ClearSelected();
+
+            if (cancionActual == null) return;
+
+            var anterior = playlist.Anterior(cancionActual);
+
+            if (anterior == null)
+            {
+                MessageBox.Show("Ya estás en la primera canción.");
+                return;
+            }
+
+            ReproducirCancion(anterior);
+            cancionActual = anterior;
         }
-        public void ejemplodijjstra()
+        
+        private void btnAddToQueue_Click(object sender, EventArgs e)
         {
-            Grafo g = new Grafo(5);
+            if (listBoxPlaylist.SelectedItem is Cancion c)
+            {
+                pila_favoritos.Apilar(c);
+                lbFav.Items.Add(c);
+            }
+        }
 
-            g.crearArista(0, 1, 2);
-            g.crearArista(0, 2, 5);
-            g.crearArista(1, 3, 1);
-            g.crearArista(2, 3, 2);
-            g.crearArista(3, 4, 3);
+        private void recomendarGénerosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormGrafo fg = new FormGrafo(grafo, Generos);
+            fg.ShowDialog();
+        }
 
-            var (dist, previo) = g.Dijkstra(0);
+        private void porAñoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Busqueda ba = new Busqueda(biblioteca, 0);
+            ba.ShowDialog();
+        }
+        
 
-            Console.WriteLine("Distancia al nodo 4: " + dist[4]);
+        private void historialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormHistorial his = new FormHistorial(cola_historial);
+            his.ShowDialog();
+        }
 
-            List<int> ruta = g.ReconstruirRuta(previo, 4);
-            Console.WriteLine("Ruta: " + string.Join(" -> ", ruta));
+        private void porArtistaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Busqueda ba = new Busqueda(biblioteca, 1);
+            ba.ShowDialog();
+        }
 
+        private void porNombreDeCancionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Busqueda ba = new Busqueda(biblioteca, 2);
+            ba.ShowDialog();
+        }
+
+        private void porAlbumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Busqueda ba = new Busqueda(biblioteca, 3);
+            ba.ShowDialog();
+        }
+
+        private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Universidad Privada del Norte\n\nEstructura de Datos (2025-2)\nExamen Final\n" +
+                "\nDocente:\nCésar Ordoñez\n\nGrupo 1:" +
+                "\n -Paul Roberto Becerra Cardenas\n -Juan Esteban Vera Palma\n -Ronaldo Tanta Luicho" +
+                "\n\n\t\tCajamarca, diciembre de 2025");
+        }
+        // -----------------------------
+        // Al cerrar el form, liberar recursos
+        // -----------------------------
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            //aqui usamos lo que dijimos en la clase ReproductorMP3 para liberar recursos del sistema con el IDisposable
+            player?.Dispose();
         }
     }
 }
+

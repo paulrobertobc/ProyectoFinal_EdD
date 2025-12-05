@@ -35,8 +35,7 @@ namespace ProyectoFinal_EdD
 
         public T Desapilar()
         {
-            if (tope == null)
-                throw new Exception("La pila está vacía");
+            if (tope == null) throw new Exception("La pila está vacía");
 
             var dato = tope.D;
             tope = tope.S;
@@ -46,8 +45,7 @@ namespace ProyectoFinal_EdD
 
         public T Peek()
         {
-            if (tope == null)
-                throw new Exception("La pila está vacía");
+            if (tope == null) throw new Exception("La pila está vacía");
 
             return tope.D;
         }
