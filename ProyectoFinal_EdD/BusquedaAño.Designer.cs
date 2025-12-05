@@ -56,7 +56,7 @@
             this.listBoxResultados.FormattingEnabled = true;
             this.listBoxResultados.Location = new System.Drawing.Point(215, 12);
             this.listBoxResultados.Name = "listBoxResultados";
-            this.listBoxResultados.Size = new System.Drawing.Size(283, 225);
+            this.listBoxResultados.Size = new System.Drawing.Size(312, 225);
             this.listBoxResultados.TabIndex = 2;
             // 
             // lblInstruccion
@@ -72,7 +72,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 249);
+            this.ClientSize = new System.Drawing.Size(539, 249);
             this.Controls.Add(this.lblInstruccion);
             this.Controls.Add(this.listBoxResultados);
             this.Controls.Add(this.txtBusqueda);

@@ -72,7 +72,7 @@ namespace ProyectoFinal_EdD
 
             foreach (var cancion in resultados)
             {
-                listBoxResultados.Items.Add($"{cancion.Titulo} - {cancion.Artista} | {cancion.Album}[{cancion.Año}]");
+                listBoxResultados.Items.Add($"{cancion.Titulo} - {cancion.Artista} | {cancion.Album} [{cancion.Año}]");
             }
         }
     }
