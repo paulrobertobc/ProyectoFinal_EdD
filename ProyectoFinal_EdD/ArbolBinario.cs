@@ -22,7 +22,6 @@ namespace ProyectoFinal_EdD
         }
 
         public Nodo raiz;
-        public int Count { get; private set; }
 
         public void Insertar(T valor)
         {
@@ -34,7 +33,6 @@ namespace ProyectoFinal_EdD
             if (r == null)
             {
                 r = new Nodo(valor);
-                Count++;
                 return;
             }
 
@@ -42,8 +40,7 @@ namespace ProyectoFinal_EdD
 
             if (cmp < 0) InsertarR(ref r.Iz, valor);
             else if (cmp > 0) InsertarR(ref r.Der, valor);
-            else
-                Console.WriteLine("Dato duplicado.");
+            else Console.WriteLine("Dato duplicado.");
         }
         public void ImprimirArbol(Nodo raiz, int espacio)
         {
@@ -52,13 +49,14 @@ namespace ProyectoFinal_EdD
             ImprimirArbol(raiz.Der, espacio + 1);
 
             for (int i = 0; i < espacio; i++)
+            {
                 Console.Write("    ");
-
+            }
             Console.WriteLine($"[{raiz.Dato}]");
 
             ImprimirArbol(raiz.Iz, espacio + 1);
         }
-        public List<T> Buscar(Func<T, bool> criterio)
+        public List<T> Buscar(Func<T, bool> criterio)//aqui usamos una funcion lambda para buscar segun lo que pidamos
         {
             List<T> resultados = new List<T>();
             BuscarRec(raiz, criterio, resultados);
@@ -88,10 +86,8 @@ namespace ProyectoFinal_EdD
 
             int cmp = valor.CompareTo(r.Dato);
 
-            if (cmp < 0)
-                r.Iz = Eliminar(r.Iz, valor);
-            else if (cmp > 0)
-                r.Der = Eliminar(r.Der, valor);
+            if (cmp < 0) r.Iz = Eliminar(r.Iz, valor);
+            else if (cmp > 0) r.Der = Eliminar(r.Der, valor);
             else
             {
                 if (r.Iz == null) return r.Der;

@@ -129,7 +129,7 @@ namespace ProyectoFinal_EdD_Grafo
 
             const int INF = int.MaxValue / 2;
 
-            // Copiar matriz
+            // Copiar matriz para no modificar la original
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
@@ -177,7 +177,7 @@ namespace ProyectoFinal_EdD_Grafo
         }
 
     }
-    public class ResultadoFloyd
+    public class ResultadoFloyd //esta clase es para tener mejor estructurado el resultado del floyd
     {
         public int[,] Distancias { get; set; }
         public bool[,] Alcanzable { get; set; }

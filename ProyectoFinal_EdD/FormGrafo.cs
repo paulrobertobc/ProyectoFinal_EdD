@@ -70,7 +70,7 @@ namespace ProyectoFinal_EdD
             int destino = cmbDestino.SelectedIndex;
             int peso = (int)numPeso.Value;
 
-            grafo.CrearArista(origen, destino, peso);
+            grafo.CrearArista(origen, destino, peso);//creamos la arista en el grafo
             MostrarMatrizAdyacencia();
             actualizarFloyd();
             MostrarFloydEnDataGrid(r);
@@ -91,30 +91,84 @@ namespace ProyectoFinal_EdD
 
             listBoxResultados.Items.Clear();
 
-            // Redirigir la consola a un buffer temporal
-            using (var sw = new System.IO.StringWriter())
+            using (var sw = new System.IO.StringWriter())// vamos a redirigir la consola a un buffer temporal
             {
                 var writer = new System.IO.StringWriter();
                 Console.SetOut(writer);
 
-                Dijkstra d = new Dijkstra(grafo);
+                Dijkstra d = new Dijkstra(grafo); //ejecutamos el Dijkstra
                 d.BuscarRuta(inicio, fin, Generos.Count);
 
-                // Recuperar toda la salida
-                string texto = writer.ToString();
+                string texto = writer.ToString();// recupermaos toda la salida
 
-                // Separar en líneas
-                string[] lineas = texto.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+                string[] lineas = texto.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);// separamos en varias líneas con el split
 
-                // Enviar cada línea al ListBox
-                foreach (string l in lineas)
+                foreach (string l in lineas)// estas lineas se las pasamos al listbox para conocer la ruta
                 {
                     listBoxResultados.Items.Add(l);
                 }
-                    
             }
         }
+        private void btnMatriz_Click(object sender, EventArgs e)
+        {
+            MostrarMatrizAdyacencia();
+        }
+        private void MostrarMatrizAdyacencia() //le vamos a poner colores al dgv
+        {
+            int n = Generos.Count;
+            int[,] mat = grafo.ObtenerMatriz();
 
+            dgvMatriz.Columns.Clear();
+            dgvMatriz.Rows.Clear();
+            dgvMatriz.RowHeadersWidth = 120;
+
+            for (int i = 0; i < n; i++)// aqui creamos las columnas
+            {
+                dgvMatriz.Columns.Add("col" + i, Generos[i]);
+            }
+            for (int i = 0; i < n; i++)// llenamos las filas con for
+            {
+                dgvMatriz.Rows.Add();
+                dgvMatriz.Rows[i].HeaderCell.Value = Generos[i];
+
+                for (int j = 0; j < n; j++)
+                {
+                    int v = mat[i, j];
+                    var cell = dgvMatriz.Rows[i].Cells[j];
+
+                    if (v == 0 && i != j)// este if es cuando no hay conexion
+                    {
+                        cell.Value = "INF";
+                        cell.Style.BackColor = Color.FromArgb(255, 204, 204); // rojo claro
+                    }
+                    else
+                    {
+                        cell.Value = (i == j ? "0" : v.ToString());
+
+                        if (i == j)// diagonal vacia
+                        {
+                            cell.Style.BackColor = Color.FromArgb(220, 220, 220); // gris
+                        }
+                        else if (v > 0 && v <= 5)// distancia pqueña (1 a 5)
+                        {
+                            cell.Style.BackColor = Color.FromArgb(204, 255, 204); // verde claro
+                        }
+                        else if (v > 5 && v <= 10)// distancia media (6 a 10)
+                        {
+                            cell.Style.BackColor = Color.FromArgb(255, 247, 192); // amarillo
+                        }
+                        else if (v > 10)// gran distancia
+                        {
+                            cell.Style.BackColor = Color.FromArgb(255, 217, 179); // naranja claro
+                        }
+                    }
+                }
+            }
+
+            dgvMatriz.AutoResizeColumns();
+            dgvMatriz.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+            dgvMatriz.AllowUserToAddRows = false;
+        }
         private void btnFloyd_Click(object sender, EventArgs e)
         {
             actualizarFloyd();
@@ -129,84 +183,17 @@ namespace ProyectoFinal_EdD
             listBoxResultados.Items.Clear();
             listBoxResultados.Items.Add("Floyd–Warshall ejecutado.");
         }
-        private void MostrarMatrizAdyacencia() //le vamos a poner colores
-        {
-            int n = Generos.Count;
-            int[,] mat = grafo.ObtenerMatriz();
-
-            dgvMatriz.Columns.Clear();
-            dgvMatriz.Rows.Clear();
-            dgvMatriz.RowHeadersWidth = 120;
-
-            // Crear columnas
-            for (int i = 0; i < n; i++)
-            {
-                dgvMatriz.Columns.Add("col" + i, Generos[i]);
-            }
-
-            // Llenar filas
-            for (int i = 0; i < n; i++)
-            {
-                dgvMatriz.Rows.Add();
-                dgvMatriz.Rows[i].HeaderCell.Value = Generos[i];
-
-                for (int j = 0; j < n; j++)
-                {
-                    int v = mat[i, j];
-                    var cell = dgvMatriz.Rows[i].Cells[j];
-
-                    // Sin conexión = INF (salvo diagonal)
-                    if (v == 0 && i != j)
-                    {
-                        cell.Value = "INF";
-                        cell.Style.BackColor = Color.FromArgb(255, 204, 204); // rojo claro
-                    }
-                    else
-                    {
-                        cell.Value = (i == j ? "0" : v.ToString());
-
-                        // Diagonal (0)
-                        if (i == j)
-                        {
-                            cell.Style.BackColor = Color.FromArgb(220, 220, 220); // gris
-                        }
-                        // Distancia pequeña (1–5)
-                        else if (v > 0 && v <= 5)
-                        {
-                            cell.Style.BackColor = Color.FromArgb(204, 255, 204); // verde claro
-                        }
-                        // Distancia media (6–10)
-                        else if (v > 5 && v <= 10)
-                        {
-                            cell.Style.BackColor = Color.FromArgb(255, 247, 192); // amarillo
-                        }
-                        // Distancia grande
-                        else if (v > 10)
-                        {
-                            cell.Style.BackColor = Color.FromArgb(255, 217, 179); // naranja claro
-                        }
-                    }
-                }
-            }
-
-            dgvMatriz.AutoResizeColumns();
-            dgvMatriz.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
-            dgvMatriz.AllowUserToAddRows = false;
-        }
-
-        private void MostrarFloydEnDataGrid(ResultadoFloyd r)
+        private void MostrarFloydEnDataGrid(ResultadoFloyd r)//a esta también le ponemos colores
         {
             dataGridViewMatriz.Columns.Clear();
             dataGridViewMatriz.Rows.Clear();
             dataGridViewMatriz.RowHeadersWidth = 120;
 
-            // Crear columnas
-            for (int i = 0; i < r.N; i++)
+            
+            for (int i = 0; i < r.N; i++)// creamos las columnas como en la funcion anterior
             {
                 dataGridViewMatriz.Columns.Add("col" + i, Generos[i]);
             }
-
-            // Agregar filas con colores
             for (int i = 0; i < r.N; i++)
             {
                 dataGridViewMatriz.Rows.Add();
@@ -218,8 +205,8 @@ namespace ProyectoFinal_EdD
 
                     DataGridViewCell cell = dataGridViewMatriz.Rows[i].Cells[j];
 
-                    // INF
-                    if (v >= int.MaxValue / 3)
+                    
+                    if (v >= int.MaxValue / 3)// si es infinito
                     {
                         cell.Value = "INF";
                         cell.Style.BackColor = Color.FromArgb(255, 204, 204);  // rojo claro
@@ -228,23 +215,19 @@ namespace ProyectoFinal_EdD
                     {
                         cell.Value = v.ToString();
 
-                        // Distancia 0 diagonal
-                        if (i == j)
+                        if (i == j)// diagonal vacia
                         {
                             cell.Style.BackColor = Color.FromArgb(220, 220, 220); // gris
                         }
-                        // Distancias pequeñas
-                        else if (v <= 5)
+                        else if (v <= 5)// distancia pequeña
                         {
                             cell.Style.BackColor = Color.FromArgb(204, 255, 204); // verde claro
                         }
-                        // Distancias medias
-                        else if (v <= 10)
+                        else if (v <= 10)// distancia mediana
                         {
                             cell.Style.BackColor = Color.FromArgb(255, 247, 192); // amarillo
                         }
-                        // Distancias largas
-                        else
+                        else// gran distancia
                         {
                             cell.Style.BackColor = Color.FromArgb(255, 217, 179); // naranja claro
                         }
@@ -256,9 +239,6 @@ namespace ProyectoFinal_EdD
             dataGridViewMatriz.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataGridViewMatriz.AllowUserToAddRows = false;
         }
-        private void btnMatriz_Click(object sender, EventArgs e)
-        {
-            MostrarMatrizAdyacencia();
-        }
+        
     }
 }

@@ -16,13 +16,10 @@ namespace ProyectoFinal_EdD
         private AudioFileReader lector;
         private WaveOutEvent salida;
 
-        public event EventHandler PlaybackStopped;
+        public event EventHandler PlaybackStopped;//este evento lo ponemos para cuando haya parado una cancion
 
-        public bool Reproduciendo => salida != null && salida.PlaybackState == PlaybackState.Playing;
+        public bool Reproduciendo => salida != null && salida.PlaybackState == PlaybackState.Playing;//estos booleanos para saber si reproduce o no
         public bool Pausado => salida != null && salida.PlaybackState == PlaybackState.Paused;
-
-        public TimeSpan Posicion => lector?.CurrentTime ?? TimeSpan.Zero;
-        public TimeSpan Duracion => lector?.TotalTime ?? TimeSpan.Zero;
 
         public void Reproducir(string ruta)
         {
@@ -68,7 +65,7 @@ namespace ProyectoFinal_EdD
                 lector = null;
             }
         }
-        public Image ObtenerCaratula(string rutaArchivo)
+        public Image ObtenerCaratula(string rutaArchivo)//aqui vamos a extraer la caratula del mp3 usando taglib
         {
             try
             {
@@ -84,12 +81,12 @@ namespace ProyectoFinal_EdD
                 }
                 else
                 {
-                    return null; // No tiene carátula
+                    return null; // Esto por si no tiene carátula
                 }
             }
             catch
             {
-                return null; // Archivo corrupto o sin metadatos
+                return null; // Esto por si el mp3 esta corrupto o no tiene metadatos
             }
         }
 

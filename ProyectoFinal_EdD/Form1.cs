@@ -123,17 +123,13 @@ namespace ProyectoFinal_EdD
 
         private void agregarArchivosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //abrimos openfiledialog para leer archivos mp3
-            using (OpenFileDialog of = new OpenFileDialog())
+            using (OpenFileDialog of = new OpenFileDialog())//abrimos openfiledialog para leer archivos mp3
             {
                 of.Filter = "Archivos de audio|*.mp3;*.wav;*.flac;*.m4a";
                 of.Multiselect = true;
-
                 if (of.ShowDialog() != DialogResult.OK) return;
-
-                foreach (var ruta in of.FileNames)
+                foreach (var ruta in of.FileNames)// aqui vamos a leer los metadatos de la canción en mp3 usando TagLibSharp
                 {
-                    // aqui vamos a leer los metadatos de la canción en mp3 usando TagLibSharp
                     try
                     {
                         var t = TagLib.File.Create(ruta);
@@ -144,40 +140,25 @@ namespace ProyectoFinal_EdD
                         var album = t.Tag.Album ?? "Desconocido";
 
                         grafo = ExpandirGrafo(grafo);
-
                         genero = genero.Trim();
-
                         int id;
 
-                        // Verificar si ya existe el género
-                        if (Generos.Values.Contains(genero, StringComparer.OrdinalIgnoreCase))
+                        if (Generos.Values.Contains(genero, StringComparer.OrdinalIgnoreCase))// Verificar si ya existe el género
                         {
-                            // Si existe, obtener su ID existente
-                            id = Generos.First(g =>g.Value.Equals(genero, StringComparison.OrdinalIgnoreCase)).Key;
+                            id = Generos.First(g =>g.Value.Equals(genero, StringComparison.OrdinalIgnoreCase)).Key;// Si existe, obtener su ID existente
                         }
                         else
                         {
-                            // Si NO existe, crear nuevo
-                            id = Generos.Count;
+                            id = Generos.Count;// Si NO existe, crear nuevo
                             Generos.Add(id, genero);
-
-                            // Como cambia la cantidad de nodos, expandimos el grafo
-                            grafo = ExpandirGrafo(grafo);
+                            grafo = ExpandirGrafo(grafo);// Como cambia la cantidad de nodos, expandimos el grafo
                         }
-
                         var c = new Cancion
                         {
-                            Titulo = titulo,
-                            Artista = artista,
-                            Año = año,
-                            Album = album,
-                            Genero = genero,
-                            Ruta = ruta
+                            Titulo = titulo, Artista = artista, Año = año, Album = album, Genero = genero, Ruta = ruta
                         };
-
                         playlist.Insertar(c);
                         biblioteca.Insertar(c);
-                        //listBoxPlaylist.Items.Add(c);
                         LlenadoLista();
                     }
                     catch (Exception ex)
@@ -185,7 +166,6 @@ namespace ProyectoFinal_EdD
                         MessageBox.Show($"No se pudo leer: {ruta}\n{ex.Message}");
                     }
                 }
-
             }
         }
         public void LlenadoLista()
@@ -258,16 +238,13 @@ namespace ProyectoFinal_EdD
 
             if (cancionActual == null)
             {
-                // Primera vez: reproducir primera canción
-                if (playlist.Cabeza != null)
+                if (playlist.Cabeza != null)// Primera vez: reproducir primera canción
                 {
                     ReproducirCancion(playlist.Cabeza.D);
                 }
                 return;
             }
-
             var siguiente = playlist.Siguiente(cancionActual);
-
             if (siguiente == null)
             {
                 MessageBox.Show("Ya estás en la última canción.");
@@ -280,17 +257,13 @@ namespace ProyectoFinal_EdD
         private void btnAnterior_Click(object sender, EventArgs e)
         {
             listBoxPlaylist.ClearSelected();
-
             if (cancionActual == null) return;
-
             var anterior = playlist.Anterior(cancionActual);
-
             if (anterior == null)
             {
                 MessageBox.Show("Ya estás en la primera canción.");
                 return;
             }
-
             ReproducirCancion(anterior);
             cancionActual = anterior;
         }
@@ -353,29 +326,25 @@ namespace ProyectoFinal_EdD
                 "\n -Paul Roberto Becerra Cardenas\n -Juan Esteban Vera Palma\n -Ronaldo Tanta Luicho" +
                 "\n\n\t\tCajamarca, diciembre de 2025");
         }
-        // -----------------------------
-        // Al cerrar el form, liberar recursos
-        // -----------------------------
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            //aqui usamos lo que dijimos en la clase ReproductorMP3 para liberar recursos del sistema con el IDisposable
-            player?.Dispose();
-        }
-
+        
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (listBoxPlaylist.SelectedItem is Cancion c)
             {
                 playlist.Eliminar(c);
                 LlenadoLista();
-                
             }
             else
             {
                 MessageBox.Show("Selecciona una canción.");
             }
             listBoxPlaylist.ClearSelected();
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)// Al cerrar el form, liberar recursos
+        {
+            base.OnFormClosing(e);
+            //aqui usamos lo que dijimos en la clase ReproductorMP3 para liberar recursos del sistema con el IDisposable
+            player?.Dispose();
         }
     }
 }
