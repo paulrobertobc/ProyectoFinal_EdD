@@ -94,6 +94,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormFavoritos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFavoritos.Designer.cs">
+      <DependentUpon>FormFavoritos.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormGrafo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormFavoritos.resx">
+      <DependentUpon>FormFavoritos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormGrafo.resx">
       <DependentUpon>FormGrafo.cs</DependentUpon>
@@ -147,6 +156,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barra_de_progreso.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pausa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fondo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

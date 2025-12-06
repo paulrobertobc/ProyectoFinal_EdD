@@ -72,6 +72,25 @@ namespace ProyectoFinal_EdD
             else return nodo.A.D;
 
         }
+        public void Eliminar(T dato)
+        {
+            var nodoAEliminar = BuscarNodo(dato);
+            if (nodoAEliminar == null) return;
+            if (nodoAEliminar == Cabeza && Cont == 1)
+            {
+                Cabeza = null;
+            }
+            else
+            {
+                nodoAEliminar.A.S = nodoAEliminar.S;
+                nodoAEliminar.S.A = nodoAEliminar.A;
+                if (nodoAEliminar == Cabeza)
+                {
+                    Cabeza = nodoAEliminar.S;
+                }
+            }
+            Cont--;
+        }
         public IEnumerator<T> GetEnumerator()
         {
             if (Cabeza == null) yield break;
@@ -85,7 +104,6 @@ namespace ProyectoFinal_EdD
             }
             while (nodo != Cabeza);
         }
-
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 

@@ -33,14 +33,11 @@
             this.btnAnterior = new System.Windows.Forms.Button();
             this.btnAñadirFav = new System.Windows.Forms.Button();
             this.listBoxPlaylist = new System.Windows.Forms.ListBox();
-            this.lbFav = new System.Windows.Forms.ListBox();
             this.lblNombreCancion = new System.Windows.Forms.Label();
             this.lbPlaylist = new System.Windows.Forms.Label();
             this.lbEstadoCancion = new System.Windows.Forms.Label();
             this.lbArtistaCancion = new System.Windows.Forms.Label();
             this.lbGenero = new System.Windows.Forms.Label();
-            this.lbcola = new System.Windows.Forms.Label();
-            this.pbCaratula = new System.Windows.Forms.PictureBox();
             this.btnAgregar = new System.Windows.Forms.ToolStripMenuItem();
             this.buscarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.porAñoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,78 +47,85 @@
             this.historialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recomendarGénerosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.lbAlbumAño = new System.Windows.Forms.Label();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCaratula)).BeginInit();
+            this.lbAlbumAño = new System.Windows.Forms.Label();
+            this.historialToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.favoritosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pbBarraMusica = new System.Windows.Forms.PictureBox();
+            this.pbCaratula = new System.Windows.Forms.PictureBox();
+            this.pbFondo = new System.Windows.Forms.PictureBox();
+            this.btnEliminar = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBarraMusica)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCaratula)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFondo)).BeginInit();
             this.SuspendLayout();
             // 
             // btnPausa
             // 
+            this.btnPausa.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.btnPausa.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPausa.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.btnPausa.Location = new System.Drawing.Point(431, 390);
+            this.btnPausa.Location = new System.Drawing.Point(108, 504);
             this.btnPausa.Name = "btnPausa";
-            this.btnPausa.Size = new System.Drawing.Size(94, 36);
+            this.btnPausa.Size = new System.Drawing.Size(104, 36);
             this.btnPausa.TabIndex = 2;
             this.btnPausa.Text = "⏸️";
-            this.btnPausa.UseVisualStyleBackColor = true;
+            this.btnPausa.UseVisualStyleBackColor = false;
             this.btnPausa.Click += new System.EventHandler(this.btnPausa_Click);
             // 
             // btnSiguiente
             // 
+            this.btnSiguiente.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.btnSiguiente.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSiguiente.Location = new System.Drawing.Point(531, 390);
+            this.btnSiguiente.Location = new System.Drawing.Point(218, 504);
             this.btnSiguiente.Name = "btnSiguiente";
-            this.btnSiguiente.Size = new System.Drawing.Size(112, 36);
+            this.btnSiguiente.Size = new System.Drawing.Size(92, 36);
             this.btnSiguiente.TabIndex = 3;
             this.btnSiguiente.Text = "⏭️";
-            this.btnSiguiente.UseVisualStyleBackColor = true;
+            this.btnSiguiente.UseVisualStyleBackColor = false;
             this.btnSiguiente.Click += new System.EventHandler(this.btnSiguiente_Click);
             // 
             // btnAnterior
             // 
+            this.btnAnterior.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.btnAnterior.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAnterior.Location = new System.Drawing.Point(318, 390);
+            this.btnAnterior.Location = new System.Drawing.Point(10, 504);
             this.btnAnterior.Name = "btnAnterior";
-            this.btnAnterior.Size = new System.Drawing.Size(107, 36);
+            this.btnAnterior.Size = new System.Drawing.Size(92, 36);
             this.btnAnterior.TabIndex = 4;
             this.btnAnterior.Text = "⏮️";
-            this.btnAnterior.UseVisualStyleBackColor = true;
+            this.btnAnterior.UseVisualStyleBackColor = false;
             this.btnAnterior.Click += new System.EventHandler(this.btnAnterior_Click);
             // 
             // btnAñadirFav
             // 
-            this.btnAñadirFav.Location = new System.Drawing.Point(76, 394);
+            this.btnAñadirFav.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.btnAñadirFav.Location = new System.Drawing.Point(343, 617);
             this.btnAñadirFav.Name = "btnAñadirFav";
             this.btnAñadirFav.Size = new System.Drawing.Size(148, 23);
             this.btnAñadirFav.TabIndex = 5;
             this.btnAñadirFav.Text = "Añadir a favoritos";
-            this.btnAñadirFav.UseVisualStyleBackColor = true;
+            this.btnAñadirFav.UseVisualStyleBackColor = false;
             this.btnAñadirFav.Click += new System.EventHandler(this.btnAddToQueue_Click);
             // 
             // listBoxPlaylist
             // 
+            this.listBoxPlaylist.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.listBoxPlaylist.FormattingEnabled = true;
-            this.listBoxPlaylist.Location = new System.Drawing.Point(16, 59);
+            this.listBoxPlaylist.Location = new System.Drawing.Point(343, 59);
             this.listBoxPlaylist.Name = "listBoxPlaylist";
-            this.listBoxPlaylist.Size = new System.Drawing.Size(278, 329);
+            this.listBoxPlaylist.Size = new System.Drawing.Size(278, 550);
             this.listBoxPlaylist.TabIndex = 8;
             this.listBoxPlaylist.DoubleClick += new System.EventHandler(this.listBoxPlaylist_DoubleClick);
-            // 
-            // lbFav
-            // 
-            this.lbFav.FormattingEnabled = true;
-            this.lbFav.Location = new System.Drawing.Point(16, 466);
-            this.lbFav.Name = "lbFav";
-            this.lbFav.Size = new System.Drawing.Size(278, 95);
-            this.lbFav.TabIndex = 9;
             // 
             // lblNombreCancion
             // 
             this.lblNombreCancion.AutoSize = true;
+            this.lblNombreCancion.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.lblNombreCancion.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombreCancion.Location = new System.Drawing.Point(314, 466);
+            this.lblNombreCancion.ForeColor = System.Drawing.Color.Navy;
+            this.lblNombreCancion.Location = new System.Drawing.Point(12, 555);
             this.lblNombreCancion.Name = "lblNombreCancion";
             this.lblNombreCancion.Size = new System.Drawing.Size(231, 29);
             this.lblNombreCancion.TabIndex = 11;
@@ -130,8 +134,9 @@
             // lbPlaylist
             // 
             this.lbPlaylist.AutoSize = true;
+            this.lbPlaylist.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.lbPlaylist.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPlaylist.Location = new System.Drawing.Point(12, 33);
+            this.lbPlaylist.Location = new System.Drawing.Point(339, 33);
             this.lbPlaylist.Name = "lbPlaylist";
             this.lbPlaylist.Size = new System.Drawing.Size(85, 23);
             this.lbPlaylist.TabIndex = 13;
@@ -140,9 +145,10 @@
             // lbEstadoCancion
             // 
             this.lbEstadoCancion.AutoSize = true;
+            this.lbEstadoCancion.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.lbEstadoCancion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbEstadoCancion.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lbEstadoCancion.Location = new System.Drawing.Point(315, 33);
+            this.lbEstadoCancion.Location = new System.Drawing.Point(8, 33);
             this.lbEstadoCancion.Name = "lbEstadoCancion";
             this.lbEstadoCancion.Size = new System.Drawing.Size(161, 24);
             this.lbEstadoCancion.TabIndex = 14;
@@ -151,8 +157,10 @@
             // lbArtistaCancion
             // 
             this.lbArtistaCancion.AutoSize = true;
+            this.lbArtistaCancion.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.lbArtistaCancion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbArtistaCancion.Location = new System.Drawing.Point(315, 499);
+            this.lbArtistaCancion.ForeColor = System.Drawing.Color.Navy;
+            this.lbArtistaCancion.Location = new System.Drawing.Point(13, 584);
             this.lbArtistaCancion.Name = "lbArtistaCancion";
             this.lbArtistaCancion.Size = new System.Drawing.Size(141, 20);
             this.lbArtistaCancion.TabIndex = 15;
@@ -161,32 +169,14 @@
             // lbGenero
             // 
             this.lbGenero.AutoSize = true;
-            this.lbGenero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbGenero.Location = new System.Drawing.Point(580, 519);
+            this.lbGenero.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbGenero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbGenero.ForeColor = System.Drawing.Color.Navy;
+            this.lbGenero.Location = new System.Drawing.Point(217, 617);
             this.lbGenero.Name = "lbGenero";
-            this.lbGenero.Size = new System.Drawing.Size(63, 16);
+            this.lbGenero.Size = new System.Drawing.Size(71, 16);
             this.lbGenero.TabIndex = 17;
             this.lbGenero.Text = "lbGenero";
-            // 
-            // lbcola
-            // 
-            this.lbcola.AutoSize = true;
-            this.lbcola.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbcola.Location = new System.Drawing.Point(12, 440);
-            this.lbcola.Name = "lbcola";
-            this.lbcola.Size = new System.Drawing.Size(99, 23);
-            this.lbcola.TabIndex = 18;
-            this.lbcola.Text = "Favoritos";
-            // 
-            // pbCaratula
-            // 
-            this.pbCaratula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbCaratula.Location = new System.Drawing.Point(318, 59);
-            this.pbCaratula.Name = "pbCaratula";
-            this.pbCaratula.Size = new System.Drawing.Size(325, 325);
-            this.pbCaratula.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCaratula.TabIndex = 19;
-            this.pbCaratula.TabStop = false;
             // 
             // btnAgregar
             // 
@@ -236,10 +226,12 @@
             // 
             // historialToolStripMenuItem
             // 
+            this.historialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.historialToolStripMenuItem1,
+            this.favoritosToolStripMenuItem});
             this.historialToolStripMenuItem.Name = "historialToolStripMenuItem";
             this.historialToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.historialToolStripMenuItem.Text = "Historial";
-            this.historialToolStripMenuItem.Click += new System.EventHandler(this.historialToolStripMenuItem_Click);
             // 
             // recomendarGénerosToolStripMenuItem
             // 
@@ -258,19 +250,9 @@
             this.acercaDeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(662, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(651, 24);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // lbAlbumAño
-            // 
-            this.lbAlbumAño.AutoSize = true;
-            this.lbAlbumAño.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbAlbumAño.Location = new System.Drawing.Point(316, 519);
-            this.lbAlbumAño.Name = "lbAlbumAño";
-            this.lbAlbumAño.Size = new System.Drawing.Size(80, 16);
-            this.lbAlbumAño.TabIndex = 20;
-            this.lbAlbumAño.Text = "lbAlbumAño";
             // 
             // acercaDeToolStripMenuItem
             // 
@@ -279,32 +261,102 @@
             this.acercaDeToolStripMenuItem.Text = "Acerca de";
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
+            // lbAlbumAño
+            // 
+            this.lbAlbumAño.AutoSize = true;
+            this.lbAlbumAño.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbAlbumAño.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbAlbumAño.ForeColor = System.Drawing.Color.Navy;
+            this.lbAlbumAño.Location = new System.Drawing.Point(14, 604);
+            this.lbAlbumAño.Name = "lbAlbumAño";
+            this.lbAlbumAño.Size = new System.Drawing.Size(90, 16);
+            this.lbAlbumAño.TabIndex = 20;
+            this.lbAlbumAño.Text = "lbAlbumAño";
+            // 
+            // historialToolStripMenuItem1
+            // 
+            this.historialToolStripMenuItem1.Name = "historialToolStripMenuItem1";
+            this.historialToolStripMenuItem1.Size = new System.Drawing.Size(122, 22);
+            this.historialToolStripMenuItem1.Text = "Historial";
+            this.historialToolStripMenuItem1.Click += new System.EventHandler(this.historialToolStripMenuItem1_Click);
+            // 
+            // favoritosToolStripMenuItem
+            // 
+            this.favoritosToolStripMenuItem.Name = "favoritosToolStripMenuItem";
+            this.favoritosToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.favoritosToolStripMenuItem.Text = "Favoritos";
+            this.favoritosToolStripMenuItem.Click += new System.EventHandler(this.favoritosToolStripMenuItem_Click);
+            // 
+            // pbBarraMusica
+            // 
+            this.pbBarraMusica.Image = global::ProyectoFinal_EdD.Properties.Resources.pausa;
+            this.pbBarraMusica.Location = new System.Drawing.Point(78, 365);
+            this.pbBarraMusica.Name = "pbBarraMusica";
+            this.pbBarraMusica.Size = new System.Drawing.Size(149, 119);
+            this.pbBarraMusica.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBarraMusica.TabIndex = 21;
+            this.pbBarraMusica.TabStop = false;
+            // 
+            // pbCaratula
+            // 
+            this.pbCaratula.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.pbCaratula.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbCaratula.Location = new System.Drawing.Point(12, 59);
+            this.pbCaratula.Name = "pbCaratula";
+            this.pbCaratula.Size = new System.Drawing.Size(300, 300);
+            this.pbCaratula.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbCaratula.TabIndex = 19;
+            this.pbCaratula.TabStop = false;
+            // 
+            // pbFondo
+            // 
+            this.pbFondo.Image = global::ProyectoFinal_EdD.Properties.Resources.fondo;
+            this.pbFondo.Location = new System.Drawing.Point(0, 0);
+            this.pbFondo.Name = "pbFondo";
+            this.pbFondo.Size = new System.Drawing.Size(656, 703);
+            this.pbFondo.TabIndex = 22;
+            this.pbFondo.TabStop = false;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.btnEliminar.Location = new System.Drawing.Point(516, 615);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(105, 23);
+            this.btnEliminar.TabIndex = 23;
+            this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.UseVisualStyleBackColor = false;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(662, 590);
+            this.ClientSize = new System.Drawing.Size(651, 666);
+            this.Controls.Add(this.btnEliminar);
+            this.Controls.Add(this.pbBarraMusica);
             this.Controls.Add(this.lbAlbumAño);
             this.Controls.Add(this.pbCaratula);
-            this.Controls.Add(this.lbcola);
             this.Controls.Add(this.lbGenero);
             this.Controls.Add(this.lbArtistaCancion);
             this.Controls.Add(this.lbEstadoCancion);
             this.Controls.Add(this.lbPlaylist);
             this.Controls.Add(this.lblNombreCancion);
-            this.Controls.Add(this.lbFav);
             this.Controls.Add(this.listBoxPlaylist);
             this.Controls.Add(this.btnAñadirFav);
             this.Controls.Add(this.btnAnterior);
             this.Controls.Add(this.btnSiguiente);
             this.Controls.Add(this.btnPausa);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.pbFondo);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "ReproductorMP3-Estructura de Datos-Final";
-            ((System.ComponentModel.ISupportInitialize)(this.pbCaratula)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBarraMusica)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCaratula)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFondo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,13 +368,11 @@
         private System.Windows.Forms.Button btnAnterior;
         private System.Windows.Forms.Button btnAñadirFav;
         private System.Windows.Forms.ListBox listBoxPlaylist;
-        private System.Windows.Forms.ListBox lbFav;
         private System.Windows.Forms.Label lblNombreCancion;
         private System.Windows.Forms.Label lbPlaylist;
         private System.Windows.Forms.Label lbEstadoCancion;
         private System.Windows.Forms.Label lbArtistaCancion;
         private System.Windows.Forms.Label lbGenero;
-        private System.Windows.Forms.Label lbcola;
         private System.Windows.Forms.PictureBox pbCaratula;
         private System.Windows.Forms.ToolStripMenuItem btnAgregar;
         private System.Windows.Forms.ToolStripMenuItem buscarToolStripMenuItem;
@@ -335,6 +385,11 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label lbAlbumAño;
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pbBarraMusica;
+        private System.Windows.Forms.PictureBox pbFondo;
+        private System.Windows.Forms.ToolStripMenuItem historialToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem favoritosToolStripMenuItem;
+        private System.Windows.Forms.Button btnEliminar;
     }
 }
 

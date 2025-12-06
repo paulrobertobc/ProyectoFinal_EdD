@@ -113,7 +113,7 @@ namespace ProyectoFinal_EdD
         private void Player_PlaybackStopped(object sender, EventArgs e)
         {
             // Al terminar una canción, reproducir siguiente de la lista enlazada playlist
-            this.BeginInvoke(new Action(() =>
+            BeginInvoke(new Action(() =>
             {
                 var siguiente = playlist.Siguiente(cancionActual);  
                 if (siguiente != null)
@@ -177,7 +177,8 @@ namespace ProyectoFinal_EdD
 
                         playlist.Insertar(c);
                         biblioteca.Insertar(c);
-                        listBoxPlaylist.Items.Add(c);
+                        //listBoxPlaylist.Items.Add(c);
+                        LlenadoLista();
                     }
                     catch (Exception ex)
                     {
@@ -187,7 +188,14 @@ namespace ProyectoFinal_EdD
 
             }
         }
-
+        public void LlenadoLista()
+        {
+            listBoxPlaylist.Items.Clear();
+            foreach (var cancion in playlist)
+            {
+                listBoxPlaylist.Items.Add(cancion);
+            }
+        }
         private void listBoxPlaylist_DoubleClick(object sender, EventArgs e)
         {
             if (listBoxPlaylist.SelectedItem is Cancion c)
@@ -212,6 +220,7 @@ namespace ProyectoFinal_EdD
                 player.Reproducir(c.Ruta);
                 cola_historial.Encolar(c);
                 pbCaratula.Image = player.ObtenerCaratula(c.Ruta) ?? Properties.Resources.nave;
+                pbBarraMusica.Image = Properties.Resources.barra_de_progreso;
                 lblNombreCancion.Text = $"{c.Titulo}";
                 lbArtistaCancion.Text = $"{c.Artista}";
                 lbGenero.Text = $"{c.Genero}";
@@ -232,12 +241,14 @@ namespace ProyectoFinal_EdD
             {
                 player.Pausar();
                 btnPausa.Text = "▶️";
+                pbBarraMusica.Image = Properties.Resources.pausa;
                 lbEstadoCancion.Text = "En Pausa: ";
             }
             else if (player.Pausado)
             {
                 player.Continuar();
                 btnPausa.Text = "⏸️";
+                pbBarraMusica.Image = Properties.Resources.barra_de_progreso;
                 lbEstadoCancion.Text = "Reproduciendo:";
             }
         }
@@ -289,8 +300,8 @@ namespace ProyectoFinal_EdD
             if (listBoxPlaylist.SelectedItem is Cancion c)
             {
                 pila_favoritos.Apilar(c);
-                lbFav.Items.Add(c);
             }
+            listBoxPlaylist.ClearSelected();
         }
 
         private void recomendarGénerosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -305,12 +316,6 @@ namespace ProyectoFinal_EdD
             ba.ShowDialog();
         }
         
-
-        private void historialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormHistorial his = new FormHistorial(cola_historial);
-            his.ShowDialog();
-        }
 
         private void porArtistaToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -330,6 +335,17 @@ namespace ProyectoFinal_EdD
             ba.ShowDialog();
         }
 
+        private void historialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FormHistorial his = new FormHistorial(cola_historial);
+            his.ShowDialog();//culpable o no
+        }
+
+        private void favoritosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormFavoritos f_fav = new FormFavoritos(pila_favoritos);
+            f_fav.ShowDialog();
+        }
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Universidad Privada del Norte\n\nEstructura de Datos (2025-2)\nExamen Final\n" +
@@ -345,6 +361,21 @@ namespace ProyectoFinal_EdD
             base.OnFormClosing(e);
             //aqui usamos lo que dijimos en la clase ReproductorMP3 para liberar recursos del sistema con el IDisposable
             player?.Dispose();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (listBoxPlaylist.SelectedItem is Cancion c)
+            {
+                playlist.Eliminar(c);
+                LlenadoLista();
+                
+            }
+            else
+            {
+                MessageBox.Show("Selecciona una canción.");
+            }
+            listBoxPlaylist.ClearSelected();
         }
     }
 }

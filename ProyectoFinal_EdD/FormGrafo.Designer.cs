@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGrafo));
             this.cmbInicio = new System.Windows.Forms.ComboBox();
             this.cmbFin = new System.Windows.Forms.ComboBox();
             this.cmbOrigen = new System.Windows.Forms.ComboBox();
@@ -47,16 +48,18 @@
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numPeso)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMatriz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMatriz)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbInicio
@@ -111,7 +114,7 @@
             // 
             // numPeso
             // 
-            this.numPeso.Location = new System.Drawing.Point(384, 19);
+            this.numPeso.Location = new System.Drawing.Point(369, 19);
             this.numPeso.Name = "numPeso";
             this.numPeso.Size = new System.Drawing.Size(74, 20);
             this.numPeso.TabIndex = 8;
@@ -200,7 +203,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(344, 23);
+            this.label5.Location = new System.Drawing.Point(329, 23);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 20;
@@ -217,7 +220,7 @@
             this.groupBox1.Controls.Add(this.numPeso);
             this.groupBox1.Location = new System.Drawing.Point(159, 32);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(530, 92);
+            this.groupBox1.Size = new System.Drawing.Size(455, 92);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Crear relación entre géneros";
@@ -231,21 +234,21 @@
             this.groupBox2.Controls.Add(this.cmbFin);
             this.groupBox2.Controls.Add(this.listBoxResultados);
             this.groupBox2.Controls.Add(this.btnDijkstra);
-            this.groupBox2.Location = new System.Drawing.Point(745, 32);
+            this.groupBox2.Location = new System.Drawing.Point(620, 32);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(476, 92);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Ejecutar Diijstra";
             // 
-            // label1
+            // label7
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Inicio:";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(119, 66);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Resultado:";
             // 
             // label6
             // 
@@ -256,14 +259,14 @@
             this.label6.TabIndex = 1;
             this.label6.Text = "Fin:";
             // 
-            // label7
+            // label1
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(119, 66);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(58, 13);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Resultado:";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Inicio:";
             // 
             // label8
             // 
@@ -283,11 +286,22 @@
             this.label9.TabIndex = 24;
             this.label9.Text = "Tabla Floyd-Warshall";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1102, 32);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(118, 92);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 25;
+            this.pictureBox1.TabStop = false;
+            // 
             // FormGrafo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1232, 461);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.groupBox2);
@@ -307,6 +321,7 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -338,5 +353,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
