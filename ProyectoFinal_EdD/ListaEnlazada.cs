@@ -30,46 +30,49 @@ namespace ProyectoFinal_EdD
             if (Cabeza == null)
             {
                 Cabeza = nuevo;
-                Cabeza.S = Cabeza;
-                Cabeza.A = Cabeza;
+                Cabeza.S = Cabeza; // El siguiente apunta a sí mismo
+                Cabeza.A = Cabeza; // El anterior apunta a sí mismo
             }
             else
             {
-                cola = Cabeza.A;
+                // Usamos una referencia clara al último nodo (Cabeza.A)
+                Nodo ultimo = Cabeza.A;
 
-                cola.S = nuevo;
-                nuevo.A = cola;
+                nuevo.S = Cabeza;   // El nuevo nodo apunta adelante a la cabeza
+                nuevo.A = ultimo;   // El nuevo nodo apunta atrás al último
 
-                nuevo.S = Cabeza;
-                Cabeza.A = nuevo;
+                ultimo.S = nuevo;   // El viejo último apunta al nuevo
+                Cabeza.A = nuevo;   // La cabeza reconoce al nuevo como el último
             }
-
             Cont++;
         }
         public Nodo BuscarNodo(T dato)
         {
+            if (Cabeza == null) return null;
+
             var aux = Cabeza;
-            while (aux != null)
+            do
             {
-                if (aux.D.Equals(dato))
+                if (Equals(aux.D, dato))
                     return aux;
                 aux = aux.S;
-            }
+            } while (aux != null && aux != Cabeza);
+
             return null;
         }
 
         public T Siguiente(T actual)
         {
             var nodo = BuscarNodo(actual);
-            if (nodo.S == null) return default;
-            else return nodo.S.D;
+            if (nodo == null) return default;
+            return nodo.S != null ? nodo.S.D : default;
         }
 
         public T Anterior(T actual)
         {
             var nodo = BuscarNodo(actual);
-            if (nodo.A == null) return default;
-            else return nodo.A.D;
+            if (nodo == null) return default;
+            return nodo.A != null ? nodo.A.D : default;
 
         }
         public void Eliminar(T dato)

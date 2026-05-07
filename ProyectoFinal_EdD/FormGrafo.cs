@@ -91,9 +91,11 @@ namespace ProyectoFinal_EdD
 
             listBoxResultados.Items.Clear();
 
-            using (var sw = new System.IO.StringWriter())// vamos a redirigir la consola a un buffer temporal
+            // Redirigir temporalmente la salida de consola a un StringWriter y restaurarla luego
+            var originalOut = Console.Out;
+            var writer = new System.IO.StringWriter();
+            try
             {
-                var writer = new System.IO.StringWriter();
                 Console.SetOut(writer);
 
                 Dijkstra d = new Dijkstra(grafo); //ejecutamos el Dijkstra
@@ -107,6 +109,11 @@ namespace ProyectoFinal_EdD
                 {
                     listBoxResultados.Items.Add(l);
                 }
+            }
+            finally
+            {
+                try { Console.SetOut(originalOut); } catch { }
+                writer.Dispose();
             }
         }
         private void btnMatriz_Click(object sender, EventArgs e)

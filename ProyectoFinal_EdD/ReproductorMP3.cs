@@ -15,6 +15,7 @@ namespace ProyectoFinal_EdD
     {
         private AudioFileReader lector;
         private WaveOutEvent salida;
+        private readonly object sync = new object();
 
         public event EventHandler PlaybackStopped;//este evento lo ponemos para cuando haya parado una cancion
 
@@ -23,38 +24,78 @@ namespace ProyectoFinal_EdD
 
         public void Reproducir(string ruta)
         {
-            Detener();
+            lock (sync)
+            {
+                Detener();
 
-            lector = new AudioFileReader(ruta);
-            salida = new WaveOutEvent();
-            salida.Init(lector);
-            salida.PlaybackStopped += Salida_PlaybackStopped;
-            salida.Play();
+                lector = new AudioFileReader(ruta);
+                salida = new WaveOutEvent();
+                salida.Init(lector);
+                salida.PlaybackStopped += Salida_PlaybackStopped;
+                salida.Play();
+            }
         }
 
         private void Salida_PlaybackStopped(object sender, StoppedEventArgs e)
         {
+            // No continuar la reproducción con la siguiente canción si hubo un error en la reproducción
+            if (e != null && e.Exception != null)
+            {
+                try { System.Diagnostics.Debug.WriteLine("Playback stopped with exception: " + e.Exception); } catch { }
+                return;
+            }
+
+            // Solo notificar al consumidor si realmente llegó al final del stream
+            lock (sync)
+            {
+                try
+                {
+                    if (lector != null && lector.Length > 0)
+                    {
+                        // Considerar que llegó al final si la posición está muy cerca del final
+                        long remaining = lector.Length - lector.Position;
+                        if (remaining > 1024) // aún queda datos -> no disparar
+                        {
+                            System.Diagnostics.Debug.WriteLine("Playback stopped before end; ignoring auto-advance (remaining bytes: " + remaining + ")");
+                            return;
+                        }
+                    }
+                }
+                catch { }
+            }
+
             PlaybackStopped?.Invoke(this, EventArgs.Empty);
         }
 
         public void Pausar()
         {
-            if (salida != null && salida.PlaybackState == PlaybackState.Playing)
-                salida.Pause();
+            lock (sync)
+            {
+                if (salida != null && salida.PlaybackState == PlaybackState.Playing)
+                    salida.Pause();
+            }
         }
 
         public void Continuar()
         {
-            if (salida != null && salida.PlaybackState == PlaybackState.Paused)
-                salida.Play();
+            lock (sync)
+            {
+                if (salida != null && salida.PlaybackState == PlaybackState.Paused)
+                    salida.Play();
+            }
         }
 
         public void Detener()
         {
             if (salida != null)
             {
-                salida.Stop();
+                // Evitar que el evento PlaybackStopped se dispare cuando detenemos manualmente
                 salida.PlaybackStopped -= Salida_PlaybackStopped;
+                try
+                {
+                    salida.Stop();
+                }
+                catch { }
                 salida.Dispose();
                 salida = null;
             }
@@ -69,19 +110,20 @@ namespace ProyectoFinal_EdD
         {
             try
             {
-                var file = TagLib.File.Create(rutaArchivo);
-
-                if (file.Tag.Pictures != null && file.Tag.Pictures.Length > 0)
+                using (var file = TagLib.File.Create(rutaArchivo))
                 {
-                    var bin = file.Tag.Pictures[0].Data.Data;
-                    using (MemoryStream ms = new MemoryStream(bin))
+                    if (file.Tag.Pictures != null && file.Tag.Pictures.Length > 0)
                     {
-                        return Image.FromStream(ms);
+                        var bin = file.Tag.Pictures[0].Data.Data;
+                        using (MemoryStream ms = new MemoryStream(bin))
+                        {
+                            return Image.FromStream(ms);
+                        }
                     }
-                }
-                else
-                {
-                    return null; // Esto por si no tiene carátula
+                    else
+                    {
+                        return null; // Esto por si no tiene carátula
+                    }
                 }
             }
             catch

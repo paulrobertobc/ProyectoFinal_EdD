@@ -107,8 +107,10 @@ namespace ProyectoFinal_EdD_Grafo
                 nodo = tabla[nodo, PREV];
             }
 
-            ruta.Reverse();
-            Console.WriteLine(string.Join(" -> ", ruta));
+            // Convertir a lista, invertir el orden (de inicio a fin) y mostrar
+            var listaRuta = ruta.ToList();
+            listaRuta.Reverse();
+            Console.WriteLine(string.Join(" -> ", listaRuta));
         }
     }
     ////////////Floy-Warshall/////////////////////
